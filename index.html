@@ -106,12 +106,14 @@
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 3rem; /* Increased padding for larger box */
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.3);
             width: 100%;
-            max-width: 400px;
+            max-width: 500px; /* Increased max-width for larger box */
             text-align: center;
+            font-weight: bold; /* Made font bold */
+            font-size: 1.2rem; /* Increased base font size */
         }
 
         .input-group {
@@ -120,19 +122,21 @@
 
         label {
             display: block;
-            font-size: 1.1rem;
+            font-size: 1.3rem; /* Increased font size */
             margin-bottom: 0.5rem;
             color: #007bff;
+            font-weight: bold; /* Made bold */
         }
 
         input {
             width: 100%;
-            padding: 0.75rem;
+            padding: 1rem; /* Increased padding */
             border: none;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.8);
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            font-size: 1rem;
+            font-size: 1.2rem; /* Increased font size */
+            font-weight: bold; /* Made bold */
             outline: none;
         }
 
@@ -144,9 +148,10 @@
             background: linear-gradient(135deg, #007bff, #0056b3);
             color: white;
             border: none;
-            padding: 0.75rem 2rem;
+            padding: 1rem 2.5rem; /* Increased padding */
             border-radius: 10px;
-            font-size: 1.1rem;
+            font-size: 1.3rem; /* Increased font size */
+            font-weight: bold; /* Made bold */
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
@@ -159,21 +164,18 @@
 
         /* Modal Styles */
         .modal {
-            display: none;
-            /* Hidden by default */
+            display: none; /* Hidden by default */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            /* Semi-transparent overlay */
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
             justify-content: center;
             align-items: center;
             z-index: 1000;
             opacity: 0;
-            transition: opacity 0.3s ease;
-            /* Smooth animation */
+            transition: opacity 0.3s ease; /* Smooth animation */
         }
 
         .modal.show {
@@ -262,13 +264,18 @@
             }
 
             .calculator {
-                padding: 1.5rem;
+                padding: 2rem; /* Adjusted for mobile */
                 max-width: 90%;
+                font-size: 1.1rem; /* Adjusted font size */
             }
 
             input,
             button {
-                font-size: 0.9rem;
+                font-size: 1.1rem; /* Adjusted */
+            }
+
+            label {
+                font-size: 1.2rem; /* Adjusted */
             }
         }
 
@@ -296,8 +303,21 @@
             }
 
             .calculator {
-                max-width: 500px;
-                padding: 2.5rem;
+                max-width: 600px; /* Increased for desktop */
+                padding: 4rem; /* Increased padding */
+                font-size: 1.4rem; /* Increased font size */
+            }
+
+            input {
+                font-size: 1.4rem; /* Increased */
+            }
+
+            button {
+                font-size: 1.5rem; /* Increased */
+            }
+
+            label {
+                font-size: 1.5rem; /* Increased */
             }
         }
     </style>
@@ -346,11 +366,11 @@
                 else if (bmi < 25) status = 'Normal';
                 else if (bmi < 30) status = 'Overweight';
                 else status = 'Obese';
-
+                
                 // Populate modal
                 document.getElementById('modalBmiValue').textContent = bmi;
                 document.getElementById('modalStatus').textContent = status;
-
+                
                 // Show modal
                 document.getElementById('bmiModal').classList.add('show');
             } else {
