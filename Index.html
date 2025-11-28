@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator - Manas College</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            /* Modern sans-serif */
+            background: linear-gradient(135deg, #e0f7ff 0%, #ffffff 100%);
+            /* Light gradient background */
+            background-attachment: fixed;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Abstract tech pattern overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 123, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 123, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 1500px;
+        }
+
+        .logo {
+            margin: 0 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Specific logos with increased sizes */
+        #logo1 {
+            width: 120px;
+            /* Increased further for a larger circle */
+            height: 120px;
+            /* Equal to width for perfect circle */
+            border-radius: 50%;
+            /* Ensures perfect circle */
+            background: url('Logo1.png') center/contain no-repeat;
+            /* Changed to contain to avoid distortion and show full image */
+        }
+
+        #logo2 {
+            width: 200px;
+            /* Increased proportionally from 140px */
+            height: 50px;
+            /* Increased proportionally from 35px */
+            border-radius: 5px;
+            /* Slight rounding for rectangular shape */
+            background: url('Logo2.png') center/contain no-repeat;
+            /* Insert Logo2 image, contain to fit without distortion */
+        }
+
+        .college-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: black;
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            /* Kept semi-transparent background for glassmorphism */
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            padding: 1rem 4rem;
+            /* Decreased top/bottom padding to 1rem, increased left/right to 4rem for wider box */
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            line-height: 1.2;
+            /* Adjusted for multi-line text */
+        }
+
+        /* BMI Calculator Box */
+        .calculator {
+            background: rgba(255, 255, 255, 0.25);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #007bff;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input:focus {
+            box-shadow: inset 0 2px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent overlay */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            /* Smooth animation */
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal .bmi-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+
+        .modal .status {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .modal button {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 2rem;
+            font-size: 1rem;
+            color: #666;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+
+            /* Mobile: 360x640, 375x812, 414x896 */
+            .college-name {
+                font-size: 1.8rem;
+                padding: 0.75rem 3rem;
+                /* Adjusted proportionally for mobile */
+            }
+
+            #logo1 {
+                width: 96px;
+                /* Increased proportionally from 80px */
+                height: 96px;
+                /* Increased proportionally from 80px */
+            }
+
+            #logo2 {
+                width: 160px;
+                /* Increased proportionally from 112px */
+                height: 40px;
+                /* Increased proportionally from 28px */
+            }
+
+            .calculator {
+                padding: 1.5rem;
+                max-width: 90%;
+            }
+
+            input,
+            button {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 1366px) {
+
+            /* Laptop/Desktop: 1366x768, 1920x1080 */
+            .college-name {
+                font-size: 3rem;
+                padding: 1.25rem 5rem;
+                /* Adjusted proportionally for desktop */
+            }
+
+            #logo1 {
+                width: 144px;
+                /* Increased proportionally from 120px */
+                height: 144px;
+                /* Increased proportionally from 120px */
+            }
+
+            #logo2 {
+                width: 240px;
+                /* Increased proportionally from 168px */
+                height: 60px;
+                /* Increased proportionally from 42px */
+            }
+
+            .calculator {
+                max-width: 500px;
+                padding: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo" id="logo1"></div>
+        <h1 class="college-name">Manas College Pithoragarh</h1>
+        <div class="logo" id="logo2"></div>
+    </div>
+
+    <div class="calculator">
+        <div class="input-group">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" placeholder="Enter height in cm">
+        </div>
+        <div class="input-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" placeholder="Enter weight in kg">
+        </div>
+        <button onclick="calculateBMI()">Calculate BMI</button>
+    </div>
+
+    <!-- Modal for BMI Result -->
+    <div class="modal" id="bmiModal">
+        <div class="modal-content">
+            <p>Your BMI: <span class="bmi-value" id="modalBmiValue"></span></p>
+            <p class="status" id="modalStatus"></p>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <strong>IT Department</strong>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value) / 100; // Convert cm to m
+            const weight = parseFloat(document.getElementById('weight').value);
+            if (height > 0 && weight > 0) {
+                const bmi = (weight / (height * height)).toFixed(1);
+                let status = '';
+                if (bmi < 18.5) status = 'Underweight';
+                else if (bmi < 25) status = 'Normal';
+                else if (bmi < 30) status = 'Overweight';
+                else status = 'Obese';
+
+                // Populate modal
+                document.getElementById('modalBmiValue').textContent = bmi;
+                document.getElementById('modalStatus').textContent = status;
+
+                // Show modal
+                document.getElementById('bmiModal').classList.add('show');
+            } else {
+                alert('Please enter valid height and weight.');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('bmiModal').classList.remove('show');
+        }
+    </script>
+</body>
+
+</html>
